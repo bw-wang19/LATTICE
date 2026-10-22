@@ -1,0 +1,39 @@
+# Standalone config: lattice serve --config configs/vllm.yaml
+# Start vLLM separately; set model to its served model name and adjust its address.
+# Enable agent.enable_context_tool only with a tool-capable model and chat template.
+server:
+  host: 127.0.0.1
+  port: 8000
+  cors_origins: []
+storage:
+  database_path: ../data/lattice.sqlite3
+models:
+  answer:
+    provider: openai_compatible
+    model: your-served-model-name
+    base_url: http://127.0.0.1:8001/v1
+    api_key: EMPTY # vLLM without authentication; for auth use api_key_env: VLLM_API_KEY instead.
+    temperature: 0.3
+    max_tokens: 1024
+    timeout: 120
+    max_retries: 1
+    extra_body: {} # vLLM-specific options, e.g. chat_template_kwargs, can go here.
+  selector: null
+routing:
+  strategy: heuristic
+  max_input_tokens: 4096
+  candidate_limit: 24
+  max_parents: 3
+  min_score: 0.12
+  fallback_to_recent: true
+context:
+  max_input_tokens: 4096
+  max_ancestor_nodes: 32
+  summary_max_chars: 500
+agent:
+  system_prompt: >-
+    你是 LATTICE，一个友好、准确的助手。请根据本轮提供的上下文回答问题，
+    优先使用用户使用的语言。如果上下文不足，请明确说明，不要编造历史内容。
+  recursion_limit: 12
+  enable_context_tool: false # Set true after configuring vLLM's tool-call support.
+  context_reserve_tokens: 768

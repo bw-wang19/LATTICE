@@ -1,0 +1,30 @@
+# Offline default: no model account, API key, or network service is required.
+server:
+  host: 127.0.0.1
+  port: 8000
+  cors_origins: []
+storage:
+  database_path: data/lattice.sqlite3
+models:
+  answer:
+    provider: mock
+    model: lattice-mock
+  selector: null # With routing.strategy=llm, null reuses the answer model.
+routing:
+  strategy: heuristic # TODO: improve automatic multi-parent dependency inference.
+  max_input_tokens: 4096 # Independent budget for LLM parent selection.
+  candidate_limit: 24
+  max_parents: 3
+  min_score: 0.12
+  fallback_to_recent: true
+context:
+  max_input_tokens: 4096
+  max_ancestor_nodes: 32
+  summary_max_chars: 500 # TODO: dependency-aware, query-conditioned compression.
+agent:
+  system_prompt: >-
+    你是 LATTICE，一个友好、准确的助手。请根据本轮提供的上下文回答问题，
+    优先使用用户使用的语言。如果上下文不足，请明确说明，不要编造历史内容。
+  recursion_limit: 12
+  enable_context_tool: true # The mock exercises one actual tool-call round trip.
+  context_reserve_tokens: 768

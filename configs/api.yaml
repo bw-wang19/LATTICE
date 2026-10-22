@@ -1,0 +1,38 @@
+# Standalone config: replace model/base_url with your provider's values.
+# This file configures an OpenAI-compatible endpoint, not native Anthropic Messages.
+server:
+  host: 127.0.0.1
+  port: 8000
+  cors_origins: []
+storage:
+  database_path: ../data/lattice.sqlite3
+models:
+  answer:
+    provider: openai_compatible
+    model: your-model-id
+    base_url: https://api.openai.com/v1
+    api_key_env: MODEL_API_KEY
+    # Omit temperature for models that do not accept this parameter.
+    max_tokens: 1024
+    timeout: 60
+    max_retries: 1
+    extra_body: {}
+  selector: null # Optionally configure a cheaper selector with the same model fields.
+routing:
+  strategy: heuristic # Switch to llm to enable the initial LLM selector implementation.
+  max_input_tokens: 4096
+  candidate_limit: 24
+  max_parents: 3
+  min_score: 0.12
+  fallback_to_recent: true
+context:
+  max_input_tokens: 4096
+  max_ancestor_nodes: 32
+  summary_max_chars: 500
+agent:
+  system_prompt: >-
+    你是 LATTICE，一个友好、准确的助手。请根据本轮提供的上下文回答问题，
+    优先使用用户使用的语言。如果上下文不足，请明确说明，不要编造历史内容。
+  recursion_limit: 12
+  enable_context_tool: false # Set true for a provider/model that supports tool calling.
+  context_reserve_tokens: 768
