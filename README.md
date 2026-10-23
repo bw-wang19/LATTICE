@@ -6,8 +6,6 @@
 
 目前提供 React + TypeScript + React Flow 前端、FastAPI、命令行和持久化对话图。默认使用离线 mock 模型，可先验证整个流程，再接入本地 vLLM 或付费 API。现有选择和压缩策略是可替换的基线，不代表已实现新的科研算法。
 
-![LATTICE 工作台：左侧自动依赖图与右侧问答联动（预置示例数据）](docs/screenshots/workspace.png)
-
 ## 快速开始
 
 需要 Python 3.11 或更新版本。在本项目目录执行：
@@ -37,7 +35,7 @@ npm run dev
 LATTICE_API_TARGET=http://127.0.0.1:8002 npm run dev
 ```
 
-界面提供会话列表、聊天记录、依赖 DAG，以及节点检查面板。平时点击图节点可定位原始问答；开启父节点选择后，直接点击图节点进行多选。支持“自动判断”“自动 + 指定”“仅指定”三种模式。已有节点可调整父节点并重新生成，成功后更新拓扑，旧回答保留在历史版本中，后续依赖节点标记为待更新。检查面板展示选择理由、实际上下文和预算省略记录。回答完成后统一更新聊天和图，当前没有流式输出。详细操作与接口见 [父节点控制说明](docs/parent-controls.md)。
+界面提供会话列表、聊天记录、依赖 DAG，以及节点检查面板。平时点击图节点可定位原始问答；开启父节点选择后，直接点击图节点进行多选。支持“自动判断”“自动 + 指定”“仅指定”三种模式。已有节点可调整父节点并重新生成，成功后更新拓扑，旧回答保留在历史版本中，后续依赖节点标记为待更新。检查面板展示选择理由、实际上下文和预算省略记录。回答完成后统一更新聊天和图，当前没有流式输出。
 
 内置示例图是明确标记的只读演示数据，不会写入 SQLite；真实聊天通过后端 API 保存。默认后端仍使用 mock 回答，要获得真实模型回复，需要按下文切换模型配置。API 密钥始终保留在后端配置或环境变量中，不填写到前端。
 
@@ -202,7 +200,6 @@ curl -X POST http://127.0.0.1:8000/api/chat \
 ```text
 frontend/         React + TypeScript + React Flow 聊天和 DAG 界面
 configs/          vLLM 与付费 API 配置示例
-docs/             架构说明和研究待办
 tests/            后端测试
 src/lattice/
   config.py       YAML 配置及环境变量
@@ -216,9 +213,7 @@ src/lattice/
   cli.py          serve / chat / demo
 ```
 
-优先替换 `routing.py` 的父节点选择策略、`context.py` 的上下文管理策略；HTTP API 和持久化记录可以保持稳定。设计说明见 [docs/architecture.md](docs/architecture.md)，研究与工程待办见 [docs/ROADMAP.md](docs/ROADMAP.md)。
-
-面向工程与论文产出的分层阅读清单见 [docs/READING_LIST.md](docs/READING_LIST.md)：包含 22 篇主清单、5 篇选读、第一轮 8 篇精读顺序，以及与本项目的区别和实验建议（核查至 2026-10-21）。
+优先替换 `routing.py` 的父节点选择策略、`context.py` 的上下文管理策略；HTTP API 和持久化记录可以保持稳定。
 
 开发检查：
 

@@ -47,3 +47,6 @@ tmp/
 *.swp
 *.swo
 *~
+
+# Local research notes, design documents, and screenshots are not published.
+/docs/
